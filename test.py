@@ -7,8 +7,8 @@ import os
 
 def hinpyoukai():
   font = ImageFont.truetype("meiryo.ttc", 32)
-  offset_x = 2
-  offset_y = 2
+  offset_x = -50
+  offset_y = -70
 
   grid_width = 1
   grid_height = 200
