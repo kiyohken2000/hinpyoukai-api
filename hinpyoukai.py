@@ -18,12 +18,33 @@ def main():
     # 受信したテキストを代入
     request_dict = request.get_json()
     recieved_image_url = str(request_dict['data'])
+    recieved_number_position = request_dict['numberPosition']
+    recieved_font_size = request_dict['fontSize']
+    recieved_is_brackets = request_dict['isBrackets']
     print('受信したURL', recieved_image_url)
+    print('受信した数字位置', recieved_number_position)
+    print('受信したフォントサイズ', recieved_font_size)
+    print('受信したカッコのオンオフ', recieved_is_brackets)
 
     # ここから画像処理
-    font = ImageFont.truetype("meiryo.ttc", 32)
-    offset_x = -50
-    offset_y = -70
+
+    # 数字の位置を決める
+    if recieved_number_position == 0:
+      # 0のときは顔の上
+      offset_x = -50
+      offset_y = -70
+    elif recieved_number_position == 1:
+      # 1のときは顔の右
+      offset_x = 2
+      offset_y = 2
+    else:
+      # 受信した数字の位置が0または1以外の場合は顔の上
+      offset_x = -50
+      offset_y = -70
+
+    # フォントサイズ
+    font_size = recieved_font_size
+    font = ImageFont.truetype("meiryo.ttc", font_size)
 
     grid_width = 1
     grid_height = 200
@@ -47,7 +68,8 @@ def main():
 
     for (top, right, bottom, left) in face_locations:
       cnt = cnt + 1
-      draw.text((right + offset_x, top + offset_y), f'({cnt})', font=font, fill='black', stroke_fill='white', stroke_width=4)
+      numberStrings = f'({cnt})' if recieved_is_brackets else f'{cnt}'
+      draw.text((right + offset_x, top + offset_y), numberStrings, font=font, fill='black', stroke_fill='white', stroke_width=4)
 
     del draw
 
