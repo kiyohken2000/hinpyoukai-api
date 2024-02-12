@@ -4,9 +4,9 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 from imgurpython import ImgurClient
 import os
+from modules import functions
 
 def hinpyoukai():
-  font = ImageFont.truetype("meiryo.ttc", 32)
   offset_x = -50
   offset_y = -70
 
@@ -32,6 +32,8 @@ def hinpyoukai():
 
   for (top, right, bottom, left) in face_locations:
     cnt = cnt + 1
+    font_size = functions.calculate_font_size((top, right, bottom, left), 0.8)
+    font = ImageFont.truetype("meiryo.ttc", font_size)
     draw.text((right + offset_x, top + offset_y), f'({cnt})', font=font, fill='black', stroke_fill='white', stroke_width=4)
 
   del draw

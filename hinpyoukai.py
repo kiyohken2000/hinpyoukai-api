@@ -6,6 +6,7 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 from imgurpython import ImgurClient
 from flask_cors import CORS
+from modules import functions
 
 app = Flask(__name__)
 CORS(app)
@@ -42,10 +43,6 @@ def main():
       offset_x = -50
       offset_y = -70
 
-    # フォントサイズ
-    font_size = recieved_font_size
-    font = ImageFont.truetype("meiryo.ttc", font_size)
-
     grid_width = 1
     grid_height = 200
 
@@ -67,8 +64,16 @@ def main():
     cnt = 0
 
     for (top, right, bottom, left) in face_locations:
+
+      # 番号
       cnt = cnt + 1
       numberStrings = f'({cnt})' if recieved_is_brackets else f'{cnt}'
+
+      # フォントサイズ
+      font_size = functions.calculate_font_size((top, right, bottom, left), recieved_font_size)
+      font = ImageFont.truetype("meiryo.ttc", font_size)
+
+      # 番号を描画する
       draw.text((right + offset_x, top + offset_y), numberStrings, font=font, fill='black', stroke_fill='white', stroke_width=4)
 
     del draw
