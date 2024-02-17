@@ -22,7 +22,7 @@ def hinpyoukai():
   # 画像データをface_recognitionで処理する
   load_image = face_recognition.load_image_file(BytesIO(image_data))
 
-  face_locations = face_recognition.face_locations(load_image, model="cnn")
+  face_locations = face_recognition.face_locations(load_image)
 
   face_locations = sorted(face_locations, key=lambda x: (x[0] // grid_height, x[1] // grid_width))
 
