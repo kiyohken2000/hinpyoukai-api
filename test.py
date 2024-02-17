@@ -5,23 +5,24 @@ from PIL import Image, ImageDraw, ImageFont
 from imgurpython import ImgurClient
 import os
 from modules import functions
+import uuid
 
 def hinpyoukai():
   offset_x = -50
-  offset_y = -70
+  offset_y = -90
 
   grid_width = 1
   grid_height = 200
 
   # URLから画像をダウンロード
-  url = "https://i.imgur.com/Ya8yuBf.jpg"
+  url = "https://i.imgur.com/UmM20hL.png"
   response = requests.get(url)
   image_data = response.content
 
   # 画像データをface_recognitionで処理する
   load_image = face_recognition.load_image_file(BytesIO(image_data))
 
-  face_locations = face_recognition.face_locations(load_image)
+  face_locations = face_recognition.face_locations(load_image, model="cnn")
 
   face_locations = sorted(face_locations, key=lambda x: (x[0] // grid_height, x[1] // grid_width))
 
@@ -38,7 +39,9 @@ def hinpyoukai():
 
   del draw
 
-  pil_image.save("output_image.jpg")
+  # ユニークなファイル名を生成して保存
+  image_filename = str(uuid.uuid4()) + ".jpg"
+  pil_image.save(image_filename)
 
   # Imgurのクライアント情報を設定
   client_id = '7c34970b70aef09'
@@ -48,7 +51,7 @@ def hinpyoukai():
   client = ImgurClient(client_id, client_secret)
 
   # アップロードする画像ファイルのパス
-  image_path = "output_image.jpg"
+  image_path = image_filename
 
   # 画像をImgurにアップロード
   uploaded_image = client.upload_from_path(image_path, anon=True)

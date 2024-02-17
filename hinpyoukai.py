@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from imgurpython import ImgurClient
 from flask_cors import CORS
 from modules import functions
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +34,7 @@ def main():
     if recieved_number_position == 0:
       # 0のときは顔の上
       offset_x = -50
-      offset_y = -70
+      offset_y = -90
     elif recieved_number_position == 1:
       # 1のときは顔の右
       offset_x = 2
@@ -41,7 +42,7 @@ def main():
     else:
       # 受信した数字の位置が0または1以外の場合は顔の上
       offset_x = -50
-      offset_y = -70
+      offset_y = -90
 
     grid_width = 1
     grid_height = 200
@@ -54,7 +55,7 @@ def main():
     # 画像データをface_recognitionで処理する
     load_image = face_recognition.load_image_file(BytesIO(image_data))
 
-    face_locations = face_recognition.face_locations(load_image)
+    face_locations = face_recognition.face_locations(load_image, model="cnn")
 
     face_locations = sorted(face_locations, key=lambda x: (x[0] // grid_height, x[1] // grid_width))
 
@@ -78,7 +79,9 @@ def main():
 
     del draw
 
-    pil_image.save("output_image.jpg")
+    # ユニークなファイル名を生成して保存
+    image_filename = str(uuid.uuid4()) + ".jpg"
+    pil_image.save(image_filename)
     print('解析完了、解析後の画像を保存した')
 
     # Imgurのクライアント情報を設定
@@ -89,7 +92,7 @@ def main():
     client = ImgurClient(client_id, client_secret)
 
     # アップロードする画像ファイルのパス
-    image_path = "output_image.jpg"
+    image_path = image_filename
 
     # 画像をImgurにアップロード
     uploaded_image = client.upload_from_path(image_path, anon=True)
@@ -100,8 +103,6 @@ def main():
 
     # アップロードした画像の削除
     os.remove(image_path)
-
-    print("Uploaded Image URL:", image_url)
 
     # 結果の出力
     return image_url
