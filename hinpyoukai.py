@@ -81,7 +81,7 @@ def main():
 
     # ユニークなファイル名を生成して保存
     image_filename = str(uuid.uuid4()) + ".jpg"
-    pil_image.save(image_filename)
+    pil_image.save(image_filename, format='JPEG', quality=100)
     print('解析完了、解析後の画像を保存した')
 
     # Imgurのクライアント情報を設定

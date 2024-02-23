@@ -41,7 +41,7 @@ def hinpyoukai():
 
   # ユニークなファイル名を生成して保存
   image_filename = str(uuid.uuid4()) + ".jpg"
-  pil_image.save(image_filename)
+  pil_image.save(image_filename, format='JPEG', quality=100)
 
   # Imgurのクライアント情報を設定
   client_id = '7c34970b70aef09'
