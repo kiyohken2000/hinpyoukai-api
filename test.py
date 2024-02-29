@@ -16,7 +16,11 @@ def hinpyoukai():
 
   # URLから画像をダウンロード
   url = "https://i.imgur.com/UmM20hL.png"
-  response = requests.get(url)
+  
+  headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'
+  }
+  response = requests.get(url, headers=headers)
   image_data = response.content
 
   # 画像データをface_recognitionで処理する

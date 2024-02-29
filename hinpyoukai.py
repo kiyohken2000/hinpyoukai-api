@@ -48,7 +48,10 @@ def main():
     grid_height = 200
 
     # URLから画像をダウンロード
-    response = requests.get(recieved_image_url)
+    headers = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36'
+    }
+    response = requests.get(recieved_image_url, headers=headers)
     image_data = response.content
     print('URLから画像をダウンロード完了')
 
